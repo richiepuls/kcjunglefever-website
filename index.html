@@ -383,10 +383,66 @@
     @media (max-width: 380px) {
       .chars-grid { grid-template-columns: 1fr; }
     }
+    /* ─── INTRO OVERLAY ──────────────────────────────── */
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      transition: opacity 0.9s ease, visibility 0.9s ease;
+    }
+    #intro-overlay.dismissed {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #intro-card {
+      position: relative;
+      width: 100%;
+      max-width: 780px;
+      border: 0.5px solid var(--green-mid);
+      background: #000;
+      box-shadow: 0 0 80px rgba(0,0,0,0.9), 0 0 40px rgba(45,107,45,0.2);
+    }
+    #introVideo {
+      display: block;
+      width: 100%;
+      max-height: 80svh;
+      object-fit: contain;
+      background: #000;
+    }
+    #intro-skip {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      background: rgba(6,14,6,0.75);
+      border: 0.5px solid var(--green-mid);
+      color: var(--text-dim);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 0.45rem 1rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    #intro-skip:hover { color: var(--cream); border-color: var(--gold); }
   </style>
 </head>
 <body>
-
+  <!-- INTRO OVERLAY -->
+<div id="intro-overlay">
+  <div id="intro-card">
+    <video id="introVideo" playsinline>
+      <source src="KCJUNGLEINTROoutput.mp4" type="video/mp4">
+    </video>
+    <button id="intro-skip">skip intro</button>
+  </div>
+</div>
 <!-- ── AMBIENT LEAF PARTICLES ── -->
 <div id="leaf-layer"></div>
 
@@ -697,7 +753,33 @@ function buildAmbience() {
   canopyGain.connect(masterGain);
   canopyNode.start();
 }
+  // INTRO OVERLAY
+(function() {
+  const overlay  = document.getElementById('intro-overlay');
+  const introVid = document.getElementById('introVideo');
+  const skipBtn  = document.getElementById('intro-skip');
+  const heroBg   = document.getElementById('heroVideo');
 
+  function dismiss() {
+    overlay.classList.add('dismissed');
+    introVid.pause();
+    introVid.src = '';
+  }
+
+  introVid.play().catch(() => {
+    skipBtn.textContent = 'tap to begin';
+    const resume = () => {
+      introVid.play();
+      skipBtn.textContent = 'skip intro';
+    };
+    overlay.addEventListener('click', resume, { once: true });
+  });
+
+  introVid.addEventListener('ended', dismiss);
+  skipBtn.addEventListener('click', dismiss);
+
+  if (heroBg) heroBg.play().catch(() => {});
+})();
 const soundBtn = document.getElementById('sound-btn');
 soundBtn.addEventListener('click', () => {
   if (!soundOn) {
