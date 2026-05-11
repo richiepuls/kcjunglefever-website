@@ -418,7 +418,7 @@
     #intro-skip {
       position: absolute;
       bottom: 1rem;
-      left: 1rem;
+      right: 1rem;
       background: rgba(6,14,6,0.75);
       border: 0.5px solid var(--green-mid);
       color: var(--text-dim);
@@ -431,6 +431,22 @@
       transition: color 0.2s, border-color 0.2s;
     }
     #intro-skip:hover { color: var(--cream); border-color: var(--gold); }
+
+    #intro-begin {
+      position: absolute;
+      background: rgba(6,14,6,0.75);
+      border: 0.5px solid var(--gold);
+      color: var(--gold);
+      font-family: 'DM Sans', sans-serif;
+      font-family: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 0.45rem 1rem;
+      cursor: pointer;
+      display: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    #intro-begin:hover {color: var(--color-light); border-color: var(--gold-light); }
   </style>
 </head>
 <body>
@@ -440,6 +456,7 @@
     <video id="introVideo" playsinline>
       <source src="KCJUNGLEINTROoutput.mp4" type="video/mp4">
     </video>
+    <button id="intro-begin">tap to begin</button>
     <button id="intro-skip">skip intro</button>
   </div>
 </div>
@@ -664,7 +681,7 @@
 // COUNTDOWN TIMER
 // ════════════════════════════════════════════
 // TODO: Replace with the actual party date/time (ISO format, local time)
-const PARTY_DATE = new Date('2025-12-31T20:00:00');
+const PARTY_DATE = new Date('2027-01-16T20:00:00');
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -758,6 +775,7 @@ function buildAmbience() {
   const overlay  = document.getElementById('intro-overlay');
   const introVid = document.getElementById('introVideo');
   const skipBtn  = document.getElementById('intro-skip');
+  const beginBtn = document.getElementById('intro-begin');
   const heroBg   = document.getElementById('heroVideo');
 
   function dismiss() {
@@ -767,12 +785,13 @@ function buildAmbience() {
   }
 
   introVid.play().catch(() => {
-    skipBtn.textContent = 'tap to begin';
-    const resume = () => {
-      introVid.play();
-      skipBtn.textContent = 'skip intro';
-    };
-    overlay.addEventListener('click', resume, { once: true });
+    // Autoplay blocked — show the tap to begin button
+    beginBtn.style.display = 'block';
+  });
+
+  beginBtn.addEventListener('click', () => {
+    introVid.play();
+    beginBtn.style.display = 'none';
   });
 
   introVid.addEventListener('ended', dismiss);
