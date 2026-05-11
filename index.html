@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jungle Fever — Kirsten's Birthday</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #050d05;
+      --bg2:         #0b160b;
+      --bg3:         #111f11;
+      --green-deep:  #1a3d1a;
+      --green-mid:   #2d6b2d;
+      --green-light: #4aaa4a;
+      --red:         #c93528;
+      --red-glow:    rgba(201,53,40,0.35);
+      --gold:        #c9a227;
+      --gold-light:  #e8c547;
+      --gold-glow:   rgba(201,162,39,0.4);
+      --cream:       #f0e6c8;
+      --text:        #c8c0a8;
+      --text-dim:    #786e58;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── LEAF PARTICLES ─────────────────────────────── */
+    #leaf-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .leaf {
+      position: absolute;
+      width: 7px; height: 13px;
+      background: var(--green-mid);
+      border-radius: 50% 0 50% 0;
+      opacity: 0;
+      top: -20px;
+      animation: leaffall var(--dur) var(--delay) infinite ease-in;
+    }
+    @keyframes leaffall {
+      0%   { transform: translateY(0)    rotate(0deg);   opacity: 0;    left: var(--x); }
+      8%   { opacity: 0.45; }
+      92%  { opacity: 0.12; }
+      100% { transform: translateY(105vh) rotate(680deg); opacity: 0; }
+    }
+
+    /* ─── HERO ───────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 1.5rem;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    /* 
+      VIDEO: Drop your video file in the same folder as this index.html
+      and uncomment the <source> line in the <video> tag below.
+    */
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.38;
+      z-index: 0;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, transparent 25%, var(--bg) 90%),
+        linear-gradient(to bottom, var(--bg) 0%, transparent 15%, transparent 80%, var(--bg) 100%);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.2rem;
+      animation: fade-up 0.7s 0.1s both;
+    }
+    .hero-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-weight: 900;
+      font-size: clamp(3.2rem, 14vw, 8.5rem);
+      line-height: 0.95;
+      color: var(--gold);
+      animation: fade-up 0.7s 0.3s both, pulse-glow 5s 1s ease-in-out infinite;
+      margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      color: var(--cream);
+      opacity: 0.75;
+      margin-bottom: 2.5rem;
+      animation: fade-up 0.7s 0.5s both;
+    }
+
+    /* ─── COUNTDOWN ──────────────────────────────────── */
+    .countdown {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 2.75rem;
+      animation: fade-up 0.7s 0.7s both;
+    }
+    .cd-unit { text-align: center; min-width: 60px; }
+    .cd-num {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 7vw, 3.25rem);
+      color: var(--gold-light);
+      line-height: 1;
+    }
+    .cd-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 5px;
+    }
+    .cd-sep {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2.25rem;
+      color: var(--gold);
+      opacity: 0.35;
+      padding-top: 2px;
+    }
+
+    /* ─── BUTTONS ────────────────────────────────────── */
+    .btn-rsvp {
+      display: inline-block;
+      padding: 1rem 3.25rem;
+      background: var(--red);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 0.78rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 35px var(--red-glow);
+      animation: fade-up 0.7s 0.9s both;
+    }
+    .btn-rsvp:hover {
+      background: #d94030;
+      box-shadow: 0 0 55px rgba(201,53,40,0.65);
+    }
+
+    /* ─── LAYOUT HELPERS ─────────────────────────────── */
+    .section-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+    }
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.6rem, 5vw, 3rem);
+      color: var(--gold);
+      line-height: 1.1;
+      margin-bottom: 1.75rem;
+    }
+    .divider {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      height: 0.5px;
+      background: linear-gradient(to right, transparent, var(--green-mid), transparent);
+    }
+
+    /* ─── EVENT INFO CARDS ───────────────────────────── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1.5rem;
+    }
+    .info-card {
+      border: 0.5px solid var(--green-deep);
+      padding: 1.5rem;
+      background: rgba(17, 31, 17, 0.6);
+    }
+    .info-icon { font-size: 1.4rem; margin-bottom: 0.7rem; }
+    .info-label {
+      font-size: 0.63rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.3rem;
+    }
+    .info-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--cream);
+      line-height: 1.3;
+    }
+
+    /* ─── CHARACTERS ─────────────────────────────────── */
+    .chars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--green-deep);
+      border: 1px solid var(--green-deep);
+    }
+    .char-card {
+      background: var(--bg);
+      padding: 1.75rem 1.4rem;
+      transition: background 0.22s;
+    }
+    .char-card:hover { background: var(--bg3); }
+    .char-animal { font-size: 1.9rem; margin-bottom: 0.65rem; }
+    .char-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 0.82rem;
+      color: var(--gold);
+      margin-bottom: 0.1rem;
+    }
+    .char-species {
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.7rem;
+    }
+    .char-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ─── FAQ ────────────────────────────────────────── */
+    .faq-list { display: flex; flex-direction: column; }
+    .faq-item { border-bottom: 0.5px solid var(--green-deep); padding: 1.4rem 0; }
+    .faq-item:first-child { border-top: 0.5px solid var(--green-deep); }
+    .faq-q {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--cream);
+      margin-bottom: 0.4rem;
+    }
+    .faq-a {
+      font-size: 0.875rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* ─── GALLERY STUB ───────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 2px;
+    }
+    .gallery-cell {
+      aspect-ratio: 1;
+      background: var(--bg2);
+      border: 0.5px solid var(--green-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      opacity: 0.35;
+      transition: opacity 0.2s;
+      cursor: default;
+    }
+    .gallery-cell:hover { opacity: 0.6; }
+    .gallery-note {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+    }
+
+    /* ─── SOUND BUTTON ───────────────────────────────── */
+    #sound-btn {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      background: var(--bg2);
+      border: 0.5px solid var(--green-mid);
+      color: var(--gold);
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    #sound-btn:hover { background: var(--green-deep); }
+    #sound-btn.on { box-shadow: 0 4px 24px rgba(0,0,0,0.6), 0 0 20px rgba(74,170,74,0.4); }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+      border-top: 0.5px solid var(--green-deep);
+    }
+    .footer-title {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold);
+      font-size: 1rem;
+      opacity: 0.4;
+      margin-bottom: 0.5rem;
+    }
+    footer p {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.18em;
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-glow {
+      0%,100% { text-shadow: 0 0 55px var(--gold-glow), 0 0 110px rgba(201,162,39,0.15); }
+      50%      { text-shadow: 0 0 80px rgba(201,162,39,0.6), 0 0 160px rgba(201,162,39,0.25); }
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 600px) {
+      .chars-grid { grid-template-columns: repeat(2, 1fr); }
+      .cd-unit { min-width: 50px; }
+      .countdown { gap: 0.4rem; }
+      .section-inner { padding: 3.5rem 1.25rem; }
+    }
+    @media (max-width: 380px) {
+      .chars-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── AMBIENT LEAF PARTICLES ── -->
+<div id="leaf-layer"></div>
+
+<!-- ── AMBIENT SOUND TOGGLE ── -->
+<button id="sound-btn" aria-label="Toggle jungle ambience" title="Jungle ambience">🔇</button>
+
+<!-- ════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<div class="hero">
+  <!--
+    VIDEO SETUP:
+    1. Place your video file (e.g. intro.mp4) in the same folder as this index.html
+    2. Uncomment the <source> line below
+    The video will autoplay muted and loop automatically.
+  -->
+  <video class="hero-video" autoplay muted loop playsinline poster="">
+    <!-- <source src="intro.mp4" type="video/mp4"> -->
+  </video>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">You are cordially summoned to</p>
+    <h1 class="hero-title">Jungle<br>Fever</h1>
+    <p class="hero-subtitle">Kirsten's Rainforest Birthday</p>
+
+    <div class="countdown" id="countdown">
+      <div class="cd-unit"><div class="cd-num" id="cd-d">--</div><div class="cd-label">Days</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-h">--</div><div class="cd-label">Hours</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-m">--</div><div class="cd-label">Min</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-unit"><div class="cd-num" id="cd-s">--</div><div class="cd-label">Sec</div></div>
+    </div>
+
+    <!--
+      PARTIFUL LINK: Replace "PARTIFUL_URL_HERE" with the actual Partiful event URL.
+    -->
+    <a href="PARTIFUL_URL_HERE" class="btn-rsvp" target="_blank" rel="noopener">RSVP on Partiful</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════
+     EVENT INFO
+════════════════════════════════════════════ -->
+<div class="section-inner">
+  <p class="section-label">The Details</p>
+  <h2 class="section-title">Find Your Way<br>Into the Wild</h2>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-icon">📅</div>
+      <div class="info-label">Date</div>
+      <!-- TODO: Replace with actual date -->
+      <div class="info-value">TBD</div>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🕗</div>
+      <div class="info-label">Time</div>
+      <!-- TODO: Replace with actual start time -->
+      <div class="info-value">TBD</div>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">📍</div>
+      <div class="info-label">Location</div>
+      <!-- TODO: Replace with actual address -->
+      <div class="info-value">TBD</div>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🦎</div>
+      <div class="info-label">Dress Code</div>
+      <div class="info-value">Party animal or jungle-ready</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════
+     CHARACTERS
+════════════════════════════════════════════ -->
+<div class="section-inner">
+  <p class="section-label">The Residents</p>
+  <h2 class="section-title">They've Been<br>Waiting for You</h2>
+  <div class="chars-grid">
+    <div class="char-card">
+      <div class="char-animal">🦎</div>
+      <div class="char-name">Iggy</div>
+      <div class="char-species">Iguana</div>
+      <div class="char-desc">Cold-blooded and calculating. Has not blinked in three days. Knows your secrets.</div>
+    </div>
+    <div class="char-card">
+      <div class="char-animal">🦧</div>
+      <div class="char-name">Ozzy</div>
+      <div class="char-species">Orangutan</div>
+      <div class="char-desc">He swings. He has a whole philosophy about the jungle. You will not understand it.</div>
+    </div>
+    <div class="char-card">
+      <div class="char-animal">🦜</div>
+      <div class="char-name">Rio</div>
+      <div class="char-species">Parrot</div>
+      <div class="char-desc">Repeats everything. Especially the things you whispered. No exceptions.</div>
+    </div>
+    <div class="char-card">
+      <div class="char-animal">🐆</div>
+      <div class="char-name">Mia</div>
+      <div class="char-species">Jaguar</div>
+      <div class="char-desc">Spotted you the moment you walked in. Has been watching ever since. Unbothered.</div>
+    </div>
+    <div class="char-card">
+      <div class="char-animal">🐸</div>
+      <div class="char-name">Cha'cha</div>
+      <div class="char-species">Tree Frog</div>
+      <div class="char-desc">Tiny. Vibrant. Possibly hallucinogenic. Do not lick the tree frog.</div>
+    </div>
+    <div class="char-card">
+      <div class="char-animal">🌿</div>
+      <div class="char-name">Tracy</div>
+      <div class="char-species">Tree</div>
+      <div class="char-desc">Ancient. Rooted. Speaks in rustling leaves that you almost understand.</div>
+    </div>
+    <div class="char-card">
+      <div class="char-animal">🐘</div>
+      <div class="char-name">Tuki</div>
+      <div class="char-species">Elephant</div>
+      <div class="char-desc">Never forgets. Keeps a mental list. Your name is on it.</div>
+    </div>
+    <div class="char-card">
+      <div class="char-animal">🦍</div>
+      <div class="char-name">Bamba</div>
+      <div class="char-species">Gorilla</div>
+      <div class="char-desc">Started doing the chest pound ironically. Now it's just his thing.</div>
+    </div>
+    <div class="char-card">
+      <div class="char-animal">🐊</div>
+      <div class="char-name">Nile</div>
+      <div class="char-species">Crocodile</div>
+      <div class="char-desc">Perfectly still. Patiently waiting. For what? The party. Probably.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════
+     FAQ
+════════════════════════════════════════════ -->
+<div class="section-inner">
+  <p class="section-label">Field Guide</p>
+  <h2 class="section-title">Before You<br>Enter the Canopy</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">Where do I park?</div>
+      <!-- TODO: Update with actual parking info once venue is confirmed -->
+      <div class="faq-a">Parking info coming once the venue is locked in. Check back closer to the date or look it up on the Partiful event.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What should I bring?</div>
+      <div class="faq-a">This is a BYOB situation. The jungle provides the vibes — you provide the libations. Bring what you plan to drink, and a little extra to share with the wildlife.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What's the dress code, really?</div>
+      <div class="faq-a">Dress like a party animal or like you're heading deep into the jungle. Animal print, explorer gear, tree frog onesie — all welcome. Come unhinged.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I bring a plus one?</div>
+      <div class="faq-a">Handle all that through the Partiful RSVP — link at the top of the page.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════════
+     PHOTO GALLERY (STUB — wire up uploads later)
+════════════════════════════════════════════ -->
+<div class="section-inner">
+  <p class="section-label">The Archive</p>
+  <h2 class="section-title">Proof It<br>Happened</h2>
+  <p style="font-size:0.875rem; color:var(--text-dim); margin-bottom:1.75rem; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.05rem;">
+    The gallery opens after the party. Come back to relive the chaos.
+  </p>
+  <!-- Placeholder grid — replace with real upload/display logic -->
+  <div class="gallery-grid">
+    <div class="gallery-cell">🌿</div>
+    <div class="gallery-cell">🦎</div>
+    <div class="gallery-cell">🌴</div>
+    <div class="gallery-cell">🐸</div>
+    <div class="gallery-cell">🦜</div>
+    <div class="gallery-cell">🌺</div>
+    <div class="gallery-cell">🐆</div>
+    <div class="gallery-cell">🦍</div>
+    <div class="gallery-cell">🐊</div>
+  </div>
+  <p class="gallery-note">📸 photo upload coming soon</p>
+</div>
+
+<!-- ════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-title">Jungle Fever</div>
+  <p>Kirsten's Birthday &middot; Chicago, IL</p>
+</footer>
+
+<script>
+// ════════════════════════════════════════════
+// LEAF PARTICLES
+// ════════════════════════════════════════════
+(function() {
+  const layer = document.getElementById('leaf-layer');
+  for (let i = 0; i < 20; i++) {
+    const l = document.createElement('div');
+    l.className = 'leaf';
+    l.style.setProperty('--x',     (Math.random() * 105) + '%');
+    l.style.setProperty('--dur',   (10 + Math.random() * 14) + 's');
+    l.style.setProperty('--delay', (Math.random() * 18) + 's');
+    layer.appendChild(l);
+  }
+})();
+
+// ════════════════════════════════════════════
+// COUNTDOWN TIMER
+// ════════════════════════════════════════════
+// TODO: Replace with the actual party date/time (ISO format, local time)
+const PARTY_DATE = new Date('2025-12-31T20:00:00');
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function tick() {
+  const diff = PARTY_DATE - Date.now();
+  if (diff <= 0) {
+    document.getElementById('countdown').innerHTML =
+      '<p style="font-family:\'Cinzel Decorative\',serif;color:var(--gold);font-size:1.1rem;letter-spacing:0.1em;">The jungle is alive.</p>';
+    return;
+  }
+  document.getElementById('cd-d').textContent = pad(Math.floor(diff / 86400000));
+  document.getElementById('cd-h').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+  document.getElementById('cd-m').textContent = pad(Math.floor((diff % 3600000) / 60000));
+  document.getElementById('cd-s').textContent = pad(Math.floor((diff % 60000) / 1000));
+}
+tick();
+setInterval(tick, 1000);
+
+// ════════════════════════════════════════════
+// AMBIENT SOUND
+// Generates layered jungle ambience via Web Audio API:
+//   - Bandpass-filtered white noise (rain / rustling)
+//   - Low sine oscillator (deep jungle rumble)
+//   - Mid-range filtered noise (distant canopy chatter)
+// ════════════════════════════════════════════
+let ctx = null, masterGain = null, soundOn = false;
+
+function buildAmbience() {
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  masterGain = ctx.createGain();
+  masterGain.gain.value = 0;
+  masterGain.connect(ctx.destination);
+
+  // --- Rain / rustling noise ---
+  const bufLen  = ctx.sampleRate * 4;
+  const buf     = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+  const data    = buf.getChannelData(0);
+  for (let i = 0; i < bufLen; i++) data[i] = Math.random() * 2 - 1;
+
+  const noiseNode = ctx.createBufferSource();
+  noiseNode.buffer = buf;
+  noiseNode.loop   = true;
+
+  const rain = ctx.createBiquadFilter();
+  rain.type            = 'bandpass';
+  rain.frequency.value = 900;
+  rain.Q.value         = 0.55;
+
+  const rainGain = ctx.createGain();
+  rainGain.gain.value = 0.22;
+
+  noiseNode.connect(rain);
+  rain.connect(rainGain);
+  rainGain.connect(masterGain);
+  noiseNode.start();
+
+  // --- Deep jungle rumble ---
+  const rumble     = ctx.createOscillator();
+  rumble.type      = 'sine';
+  rumble.frequency.value = 52;
+  const rumbleGain = ctx.createGain();
+  rumbleGain.gain.value  = 0.045;
+  rumble.connect(rumbleGain);
+  rumbleGain.connect(masterGain);
+  rumble.start();
+
+  // --- Distant canopy layer ---
+  const canopyBuf    = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+  const canopyData   = canopyBuf.getChannelData(0);
+  for (let i = 0; i < bufLen; i++) canopyData[i] = Math.random() * 2 - 1;
+
+  const canopyNode = ctx.createBufferSource();
+  canopyNode.buffer = canopyBuf;
+  canopyNode.loop   = true;
+
+  const canopy = ctx.createBiquadFilter();
+  canopy.type            = 'bandpass';
+  canopy.frequency.value = 2800;
+  canopy.Q.value         = 1.2;
+
+  const canopyGain = ctx.createGain();
+  canopyGain.gain.value = 0.06;
+
+  canopyNode.connect(canopy);
+  canopy.connect(canopyGain);
+  canopyGain.connect(masterGain);
+  canopyNode.start();
+}
+
+const soundBtn = document.getElementById('sound-btn');
+soundBtn.addEventListener('click', () => {
+  if (!soundOn) {
+    if (!ctx) buildAmbience();
+    masterGain.gain.cancelScheduledValues(ctx.currentTime);
+    masterGain.gain.setValueAtTime(masterGain.gain.value, ctx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(1, ctx.currentTime + 1.8);
+    soundBtn.textContent = '🔊';
+    soundBtn.classList.add('on');
+    soundOn = true;
+  } else {
+    masterGain.gain.cancelScheduledValues(ctx.currentTime);
+    masterGain.gain.setValueAtTime(masterGain.gain.value, ctx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.2);
+    soundBtn.textContent = '🔇';
+    soundBtn.classList.remove('on');
+    soundOn = false;
+  }
+});
+</script>
+</body>
+</html>
