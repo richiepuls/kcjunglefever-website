@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#060e06"/>
+
+  <!-- Body -->
+  <ellipse cx="16" cy="19" rx="7" ry="6" fill="#2d6b2d"/>
+
+  <!-- Head -->
+  <ellipse cx="16" cy="13" rx="6.5" ry="5.5" fill="#2d6b2d"/>
+
+  <!-- Eye sockets (gold ring) -->
+  <circle cx="11.5" cy="11" r="3.2" fill="#c9a227"/>
+  <circle cx="20.5" cy="11" r="3.2" fill="#c9a227"/>
+
+  <!-- Eyeballs -->
+  <circle cx="11.5" cy="11" r="2.2" fill="#c93528"/>
+  <circle cx="20.5" cy="11" r="2.2" fill="#c93528"/>
+
+  <!-- Pupils -->
+  <ellipse cx="11.5" cy="11" rx="0.9" ry="1.4" fill="#050d05"/>
+  <ellipse cx="20.5" cy="11" rx="0.9" ry="1.4" fill="#050d05"/>
+
+  <!-- Eye shine -->
+  <circle cx="12.1" cy="10.2" r="0.5" fill="rgba(255,255,255,0.7)"/>
+  <circle cx="21.1" cy="10.2" r="0.5" fill="rgba(255,255,255,0.7)"/>
+
+  <!-- Mouth line -->
+  <path d="M12.5 16 Q16 18 19.5 16" stroke="#1a3d1a" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+  <!-- Front toes left -->
+  <circle cx="8"  cy="21" r="1.4" fill="#4aaa4a"/>
+  <circle cx="6"  cy="19.5" r="1.4" fill="#4aaa4a"/>
+  <circle cx="6.5" cy="22.5" r="1.4" fill="#4aaa4a"/>
+
+  <!-- Front toes right -->
+  <circle cx="24"  cy="21" r="1.4" fill="#4aaa4a"/>
+  <circle cx="26"  cy="19.5" r="1.4" fill="#4aaa4a"/>
+  <circle cx="25.5" cy="22.5" r="1.4" fill="#4aaa4a"/>
+</svg>
